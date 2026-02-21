@@ -762,12 +762,12 @@ body.dark .styled-select:hover {
 /* ── 12. RESPONSIVE ── */
 @media (max-width: 480px) {
   .page-wrapper {
-    padding: 16px 10px 40px;
+    padding: 16px 6px 40px;
     gap: 14px;
   }
 
   .card {
-    padding: 20px 16px;
+    padding: 16px 10px;
   }
 
   .countdown-card {
@@ -801,6 +801,22 @@ body.dark .styled-select:hover {
     width: 40px;
     height: 40px;
     font-size: 1.1rem;
+  }
+
+  /* Let schedule table use full width on mobile */
+  .schedule-card {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .schedule-table {
+    min-width: unset;
+    font-size: 0.8rem;
+  }
+
+  .schedule-table thead th,
+  .schedule-table tbody td {
+    padding: 8px 8px;
   }
 }
 
