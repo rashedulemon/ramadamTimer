@@ -245,6 +245,20 @@ function updatePage() {
   const iftarEpoch = bstTimeToEpoch(today.date, today.iftar);
   const msToIftar = iftarEpoch - epochNow;
 
+  /* ── AUTO DARK MODE CHECK ─────────────────────────────── */
+  const userPref = localStorage.getItem('darkMode');
+  if (userPref === null) {
+    const hr = new Date().getHours();
+    const isEvening = msToIftar <= 0 || hr >= 18 || hr < 5;
+    if (isEvening && !document.body.classList.contains('dark')) {
+      document.body.classList.add('dark');
+      elDarkIcon.textContent = '☀️';
+    } else if (!isEvening && document.body.classList.contains('dark')) {
+      document.body.classList.remove('dark');
+      elDarkIcon.textContent = '🌙';
+    }
+  }
+
   if (msToIftar > 0) {
     elCountdownLabel.textContent = '🌅 Time Until Iftar';
     elCountdownDisplay.hidden = false;
@@ -281,6 +295,7 @@ function setCountdown(ms) {
 function buildScheduleTable() {
   if (!elScheduleTbody || !SCHEDULE.length) return;
 
+  elScheduleTbody.innerHTML = '';
   const { dateStr: todayStr } = getBSTNow();
 
   SCHEDULE.forEach(entry => {
@@ -328,9 +343,21 @@ if (elScheduleToggle) {
 
 /* ── DARK MODE ───────────────────────────────────────────── */
 function initDarkMode() {
-  if (localStorage.getItem('darkMode') === 'true') {
+  const userPref = localStorage.getItem('darkMode');
+
+  if (userPref === 'true') {
     document.body.classList.add('dark');
     elDarkIcon.textContent = '☀️';
+  } else if (userPref === 'false') {
+    document.body.classList.remove('dark');
+    elDarkIcon.textContent = '🌙';
+  } else {
+    // Initial guess before updatePage runs (approx 6 PM to 5 AM)
+    const hr = new Date().getHours();
+    if (hr >= 18 || hr < 5) {
+      document.body.classList.add('dark');
+      elDarkIcon.textContent = '☀️';
+    }
   }
 }
 
