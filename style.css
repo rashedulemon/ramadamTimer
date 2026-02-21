@@ -717,6 +717,14 @@ body.dark .styled-select:hover {
   opacity: 0.7;
 }
 
+.footer-credit {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--secondary);
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
 /* ── 11. FADE-IN ANIMATION ── */
 .fade-in {
   opacity: 0;
