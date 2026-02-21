@@ -1,0 +1,859 @@
+/* ============================================================
+   RAJSHAHI RAMADAN 2026 – STYLESHEET
+   Islamic elegant minimal dark-capable design
+   ============================================================ */
+
+/* ── 1. CSS CUSTOM PROPERTIES (Light theme) ── */
+:root {
+  --primary: #0f3d3e;
+  --primary-mid: #1a5f61;
+  --secondary: #e2b714;
+  --accent: #c84b31;
+  --bg: #f8f5e6;
+  --bg-card: #ffffff;
+  --bg-card2: #f0ece0;
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --border: rgba(15, 61, 62, 0.12);
+  --shadow: 0 8px 32px rgba(15, 61, 62, 0.13);
+  --shadow-hover: 0 16px 48px rgba(15, 61, 62, 0.22);
+  --gold-glow: 0 0 24px rgba(226, 183, 20, 0.25);
+  --radius: 18px;
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark theme overrides */
+body.dark {
+  --bg: #0b1f20;
+  --bg-card: #132b2c;
+  --bg-card2: #0f2223;
+  --text: #f0ece0;
+  --text-muted: #9ab5b6;
+  --border: rgba(226, 183, 20, 0.15);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* ── 2. RESET & BASE ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background-color var(--transition), color var(--transition);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── 3. ISLAMIC GEOMETRIC BACKGROUND PATTERN ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.045;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%230f3d3e' fill-rule='evenodd'%3E%3Cpath d='M40 0 L46 14 L60 14 L50 23 L54 37 L40 29 L26 37 L30 23 L20 14 L34 14Z'/%3E%3Cpath d='M0 40 L6 54 L20 54 L10 63 L14 77 L0 69 L-14 77 L-10 63 L-20 54 L-6 54Z'/%3E%3Cpath d='M80 40 L86 54 L100 54 L90 63 L94 77 L80 69 L66 77 L70 63 L60 54 L74 54Z'/%3E%3Cpath d='M40 80 L46 94 L60 94 L50 103 L54 117 L40 109 L26 117 L30 103 L20 94 L34 94Z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+body.dark::before {
+  opacity: 0.06;
+  filter: invert(1);
+}
+
+/* ── 4. PAGE WRAPPER ── */
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── 5. DARK MODE TOGGLE ── */
+.dark-toggle {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 100;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.dark-toggle:hover {
+  transform: scale(1.12) rotate(20deg);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ── 6. HEADER ── */
+.site-header {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.header-decor {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+}
+
+.lantern {
+  width: 44px;
+  height: auto;
+  color: var(--secondary);
+  opacity: 0.85;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(226, 183, 20, 0.4));
+  animation: swingLantern 4s ease-in-out infinite alternate;
+}
+
+.lantern-left {
+  animation-delay: 0s;
+}
+
+.lantern-right {
+  animation-delay: 0.6s;
+}
+
+@keyframes swingLantern {
+  from {
+    transform: rotate(-5deg);
+  }
+
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+.header-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.crescent-icon {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(var(--gold-glow));
+}
+
+.site-title {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  transition: color var(--transition);
+}
+
+body.dark .site-title {
+  color: var(--secondary);
+}
+
+.site-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* ── 7. CARDS ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 24px;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition), border-color var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ── TODAY CARD ── */
+.today-card {
+  border-top: 4px solid var(--primary);
+  padding: 16px 22px;
+}
+
+body.dark .today-card {
+  border-top-color: var(--secondary);
+}
+
+.today-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.today-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.today-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+}
+
+.today-time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.today-time-row .time-label {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.today-time-row .time-value {
+  font-size: 1.45rem;
+  min-width: 90px;
+  text-align: right;
+}
+
+.card-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: var(--secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 30px;
+  padding: 3px 13px;
+  margin-bottom: 6px;
+}
+
+body.dark .card-badge {
+  background: var(--secondary);
+  color: var(--primary);
+}
+
+.card-date {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+/* ── TIMES ROW ── */
+.times-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.times-row.slim .time-value {
+  font-size: 1.4rem;
+}
+
+.time-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.time-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.time-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--transition);
+}
+
+body.dark .time-value {
+  color: var(--text);
+}
+
+.iftar-highlight {
+  color: var(--accent) !important;
+  text-shadow: 0 0 18px rgba(200, 75, 49, 0.25);
+}
+
+.time-divider {
+  width: 1px;
+  height: 44px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── 8. COUNTDOWN CARD ── */
+.countdown-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+  border: none;
+  text-align: center;
+  padding: 36px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle glow ring */
+.countdown-card::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 183, 20, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.countdown-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.countdown-display {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+}
+
+.digit-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.digit {
+  font-size: clamp(2.8rem, 10vw, 4.8rem);
+  font-weight: 800;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  animation: pulseDigit 1s ease-in-out infinite;
+}
+
+.digit-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+}
+
+.colon {
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1;
+  margin-top: 2px;
+  animation: blinkColon 1s step-end infinite;
+}
+
+@keyframes pulseDigit {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes blinkColon {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.ramadan-over-msg {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--secondary);
+  padding: 12px 0;
+}
+
+/* ── 9. TOMORROW CARD ── */
+.tomorrow-card {
+  background: var(--bg-card2);
+  border: 1px dashed var(--border);
+}
+
+.tomorrow-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ── 10. FULL SCHEDULE CARD ── */
+.schedule-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.schedule-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background var(--transition), color var(--transition);
+}
+
+.schedule-toggle:hover {
+  background: var(--bg-card2);
+}
+
+.schedule-toggle-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary);
+}
+
+body.dark .schedule-toggle-text {
+  color: var(--secondary);
+}
+
+.schedule-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.toggle-arrow {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: transform var(--transition);
+}
+
+.toggle-arrow.open {
+  transform: rotate(180deg);
+}
+
+.schedule-wrapper {
+  padding: 0 24px 24px;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.schedule-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.legend-today {
+  color: var(--secondary);
+}
+
+.legend-passed {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.schedule-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 340px;
+}
+
+.schedule-table thead th {
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  position: sticky;
+  top: 0;
+}
+
+body.dark .schedule-table thead th {
+  background: #0a2829;
+  color: var(--secondary);
+}
+
+.schedule-table td {
+  padding: 9px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  transition: background var(--transition);
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.schedule-table tbody tr:nth-child(even) td {
+  background: rgba(15, 61, 62, 0.03);
+}
+
+body.dark .schedule-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Today's row */
+.schedule-table tbody tr.row-today td {
+  background: rgba(226, 183, 20, 0.14) !important;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+body.dark .schedule-table tbody tr.row-today td {
+  background: rgba(226, 183, 20, 0.18) !important;
+  color: var(--secondary);
+}
+
+.schedule-table tbody tr.row-today td:first-child {
+  border-left: 3px solid var(--secondary);
+}
+
+/* Passed rows */
+.schedule-table tbody tr.row-passed td {
+  opacity: 0.42;
+}
+
+/* Iftar column highlight */
+.schedule-table td.col-iftar {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.schedule-table tbody tr.row-today td.col-iftar {
+  color: var(--accent);
+}
+
+/* Day number pill */
+.day-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: transparent;
+}
+
+.row-today .day-pill {
+  background: var(--secondary);
+  color: var(--primary);
+}
+
+/* ── 10b. LOCATION SELECTOR CARD ── */
+.location-card {
+  padding: 18px 24px;
+}
+
+.location-selector {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.select-group {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.select-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.styled-select {
+  width: 100%;
+  padding: 10px 36px 10px 14px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230f3d3e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+body.dark .styled-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e2b714' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.styled-select:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(226, 183, 20, 0.2);
+}
+
+.styled-select:hover {
+  border-color: var(--primary);
+}
+
+body.dark .styled-select:hover {
+  border-color: var(--secondary);
+}
+
+/* ── 11. FOOTER ── */
+.site-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-note {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+/* ── 11. FADE-IN ANIMATION ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.fade-in:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.fade-in:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.fade-in:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+.fade-in:nth-child(4) {
+  animation-delay: 0.35s;
+}
+
+.fade-in:nth-child(5) {
+  animation-delay: 0.45s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── 12. RESPONSIVE ── */
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding: 16px 10px 40px;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 20px 16px;
+  }
+
+  .countdown-card {
+    padding: 28px 12px;
+  }
+
+  .lantern {
+    width: 32px;
+  }
+
+  .crescent-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .time-value {
+    font-size: 1.5rem;
+  }
+
+  .times-row.slim .time-value {
+    font-size: 1.25rem;
+  }
+
+  .header-decor {
+    gap: 6px;
+  }
+
+  .dark-toggle {
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .page-wrapper {
+    padding: 32px 24px 56px;
+  }
+}
+
+/* ── MOBILE: desktop-grid is just a plain flex column ── */
+.desktop-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.desktop-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.desktop-right {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── DESKTOP TWO-COLUMN LAYOUT (≥900px) ── */
+@media (min-width: 900px) {
+  .page-wrapper {
+    max-width: 1100px;
+    padding: 36px 32px 64px;
+  }
+
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .desktop-left {
+    gap: 20px;
+  }
+
+  /* Countdown fills the full height of the right column */
+  .desktop-right {
+    position: sticky;
+    top: 24px;
+  }
+
+  .desktop-right .countdown-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 300px;
+  }
+
+  /* Bigger digits on desktop */
+  .desktop-right .digit {
+    font-size: clamp(3.5rem, 6vw, 5rem);
+  }
+}
