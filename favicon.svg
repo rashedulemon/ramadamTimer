@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark green background circle -->
+  <circle cx="16" cy="16" r="16" fill="#0f3d3e"/>
+
+  <!-- Half moon (semi-circle) gold -->
+  <path d="M16 6
+    A10 10 0 0 1 16 26
+    L16 6z"
+    fill="#e2b714"/>
+</svg>

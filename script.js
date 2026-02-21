@@ -59,14 +59,12 @@ function getBSTNow() {
 }
 
 /**
- * Convert a schedule date + time string ("H:MM") to UTC epoch ms.
- * PDF times are 12-hour format – Iftar is always PM, Sehri is always AM.
- * @param {boolean} forcePM - add 12h to treat time as PM (for Iftar)
+ * Convert a schedule date + "HH:MM" (24h) string to UTC epoch ms.
+ * All times in schedule_data.js are now stored in 24h format.
  */
-function bstTimeToEpoch(dateStr, timeStr, forcePM = false) {
+function bstTimeToEpoch(dateStr, timeStr) {
   const [y, mo, d] = dateStr.split('-').map(Number);
-  let [hh, mm] = timeStr.split(':').map(Number);
-  if (forcePM) hh += 12;  // e.g. "6:05" → 18:05 for PM iftar
+  const [hh, mm] = timeStr.split(':').map(Number);
   return Date.UTC(y, mo - 1, d, hh, mm, 0) - (6 * 60 * 60 * 1000);
 }
 
@@ -74,14 +72,14 @@ function bstTimeToEpoch(dateStr, timeStr, forcePM = false) {
 const pad2 = (n) => String(Math.floor(n)).padStart(2, '0');
 
 /**
- * Format a time string "H:MM" for display.
- * PDF times are in 12-hour format without AM/PM indicator.
- * @param {string} t      - Time string like "5:57" or "6:02"
- * @param {boolean} forcePM - true for Iftar (always PM), false for Sehri (always AM)
+ * Format a 24h time string "HH:MM" for display as 12h AM/PM.
+ * e.g. "05:17" → "5:17 AM",  "18:05" → "6:05 PM"
  */
-function formatTime12(t, forcePM = false) {
-  const [hh, mm] = t.split(':').map(Number);
-  const suffix = forcePM ? 'PM' : 'AM';
+function formatTime12(t) {
+  let [hh, mm] = t.split(':').map(Number);
+  const suffix = hh >= 12 ? 'PM' : 'AM';
+  if (hh > 12) hh -= 12;
+  if (hh === 0) hh = 12;
   return `${hh}:${pad2(mm)} ${suffix}`;
 }
 
@@ -207,12 +205,12 @@ function updatePage() {
     if (epochNow < bstTimeToEpoch(first.date, '00:00')) {
       elRamadanDay.textContent = 'Ramadan Starts';
       elTodayDate.textContent = `1 Ramadan: ${formatDate(first.date)}`;
-      elSehriTime.textContent = formatTime12(first.sehri_end, false);
-      elIftarTime.textContent = formatTime12(first.iftar, true);
+      elSehriTime.textContent = formatTime12(first.sehri_end);
+      elIftarTime.textContent = formatTime12(first.iftar);
       elCountdownLabel.textContent = 'Time Until First Sehri';
       elCountdownDisplay.hidden = false;
       elRamadanOver.hidden = true;
-      setCountdown(bstTimeToEpoch(first.date, first.sehri_end, false) - epochNow);
+      setCountdown(bstTimeToEpoch(first.date, first.sehri_end) - epochNow);
       elTomorrowCard.style.display = 'none';
     } else {
       elRamadanDay.textContent = 'Ramadan 1447H';
@@ -232,19 +230,19 @@ function updatePage() {
 
   elRamadanDay.textContent = `✨ Ramadan Day ${today.ramadan_day}`;
   elTodayDate.textContent = formatDate(today.date);
-  elSehriTime.textContent = formatTime12(today.sehri_end, false);
-  elIftarTime.textContent = formatTime12(today.iftar, true);
+  elSehriTime.textContent = formatTime12(today.sehri_end);
+  elIftarTime.textContent = formatTime12(today.iftar);
 
   if (tomorrow) {
-    elTomorrowSehri.textContent = formatTime12(tomorrow.sehri_end, false);
-    elTomorrowIftar.textContent = formatTime12(tomorrow.iftar, true);
+    elTomorrowSehri.textContent = formatTime12(tomorrow.sehri_end);
+    elTomorrowIftar.textContent = formatTime12(tomorrow.iftar);
     elTomorrowCard.style.display = '';
   } else {
     elTomorrowCard.style.display = 'none';
   }
 
   /* ── COUNTDOWN LOGIC ── */
-  const iftarEpoch = bstTimeToEpoch(today.date, today.iftar, true);
+  const iftarEpoch = bstTimeToEpoch(today.date, today.iftar);
   const msToIftar = iftarEpoch - epochNow;
 
   if (msToIftar > 0) {
@@ -254,7 +252,7 @@ function updatePage() {
     setCountdown(msToIftar);
   } else {
     if (tomorrow) {
-      const msToSehri = bstTimeToEpoch(tomorrow.date, tomorrow.sehri_end, false) - epochNow;
+      const msToSehri = bstTimeToEpoch(tomorrow.date, tomorrow.sehri_end) - epochNow;
       if (msToSehri > 0) {
         elCountdownLabel.textContent = '🌙 Iftar Passed · Time Until Next Sehri';
         elCountdownDisplay.hidden = false;
@@ -297,10 +295,10 @@ function buildScheduleTable() {
     tdDate.textContent = formatDateShort(entry.date);
 
     const tdSehri = document.createElement('td');
-    tdSehri.textContent = formatTime12(entry.sehri_end, false);
+    tdSehri.textContent = formatTime12(entry.sehri_end);
 
     const tdIftar = document.createElement('td');
-    tdIftar.textContent = formatTime12(entry.iftar, true);
+    tdIftar.textContent = formatTime12(entry.iftar);
     tdIftar.classList.add('col-iftar');
 
     tr.append(tdDay, tdDate, tdSehri, tdIftar);
