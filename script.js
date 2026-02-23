@@ -38,6 +38,50 @@ const elDivisionSelect = document.getElementById('divisionSelect');
 const elZillaSelect = document.getElementById('zillaSelect');
 const elFooterLocation = document.getElementById('footerLocation');
 const elScheduleTbody = document.getElementById('scheduleTbody');
+const elInstallBtn = document.getElementById('installBtn');
+
+/* ── PWA INSTALLATION LOGIC ────────────────────────────── */
+let deferredPrompt;
+
+// Only show logs in dev
+const logPWA = (msg, data) => console.log(`[PWA] ${msg}`, data || '');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  logPWA('beforeinstallprompt fired');
+  e.preventDefault();
+  deferredPrompt = e;
+  if (elInstallBtn) {
+    elInstallBtn.style.display = 'flex';
+    elInstallBtn.classList.add('pulse'); // Let's add a subtle pulse
+  }
+});
+
+if (elInstallBtn) {
+  elInstallBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      logPWA('Click: No deferredPrompt available');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    logPWA(`User response: ${outcome}`);
+    deferredPrompt = null;
+    elInstallBtn.style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  if (elInstallBtn) elInstallBtn.style.display = 'none';
+  logPWA('App was successfully installed');
+});
+
+// Detect iOS specifically for PWA help
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+if (isIOS) {
+  logPWA('iOS detected - automatic prompt not supported');
+  // Optional: You could show the button with instructions for iOS
+}
 
 /* ── ACTIVE SCHEDULE (updated when location changes) ────── */
 let SCHEDULE = []; // current 30-row array

@@ -15,6 +15,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0f3d3e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Ramadan 2026" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HENNG1JLRP"></script>
     <script>
@@ -43,6 +49,11 @@
     <!-- ===== DARK MODE TOGGLE ===== -->
     <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
         <span id="darkIcon">🌙</span>
+    </button>
+
+    <!-- PWA Install Button -->
+    <button class="install-btn" id="installBtn" style="display: none;" aria-label="Install app" title="Install app">
+        <span>📲 Install</span>
     </button>
 
     <div class="page-wrapper">
@@ -231,6 +242,15 @@
 
     <script src="schedule_data.js"></script>
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker failed', err));
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -117,6 +117,34 @@ main {
   box-shadow: var(--shadow-hover);
 }
 
+/* ── 5b. INSTALL BUTTON ── */
+.install-btn {
+  position: fixed;
+  top: 18px;
+  right: 74px; /* Space next to dark toggle */
+  z-index: 100;
+  background: var(--primary);
+  color: var(--secondary);
+  border: 1.5px solid var(--border);
+  border-radius: 30px;
+  padding: 0 16px;
+  height: 46px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.install-btn:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-hover);
+}
+
 /* ── 6. HEADER ── */
 .site-header {
   text-align: center;
