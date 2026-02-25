@@ -411,7 +411,121 @@ elDarkToggle.addEventListener('click', () => {
   localStorage.setItem('darkMode', isDark);
 });
 
+/* ── CUSTOM GLASS DROPDOWN ────────────────────────────── */
+
+/**
+ * Creates or refreshes a glassmorphic dropdown UI for a native select.
+ */
+function setupCustomDropdown(selectEl) {
+  // If already setup, clear the custom elements next to it
+  const parent = selectEl.parentElement;
+  let wrapper = parent.querySelector('.custom-dropdown-outer');
+
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.className = 'custom-dropdown-outer';
+    wrapper.style.width = '100%';
+    selectEl.classList.add('native-hidden');
+    parent.appendChild(wrapper);
+  } else {
+    wrapper.innerHTML = '';
+  }
+
+  const trigger = document.createElement('div');
+  trigger.className = 'glass-select';
+  trigger.textContent = selectEl.options[selectEl.selectedIndex]?.textContent || 'Select...';
+
+  const optionsMenu = document.createElement('div');
+  optionsMenu.className = 'glass-options';
+
+  // Rebuild options
+  Array.from(selectEl.options).forEach(opt => {
+    const customOpt = document.createElement('div');
+    customOpt.className = 'glass-option';
+    if (opt.value === selectEl.value) customOpt.classList.add('selected');
+    customOpt.textContent = opt.textContent;
+    customOpt.dataset.value = opt.value;
+
+    customOpt.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectEl.value = customOpt.dataset.value;
+      trigger.textContent = customOpt.textContent;
+
+      // Update 'selected' class
+      wrapper.querySelectorAll('.glass-option').forEach(o => o.classList.remove('selected'));
+      customOpt.classList.add('selected');
+
+      // Close menu
+      optionsMenu.classList.remove('show');
+      trigger.classList.remove('active');
+
+      // Trigger native change
+      selectEl.dispatchEvent(new Event('change'));
+    });
+
+    optionsMenu.appendChild(customOpt);
+  });
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isShowing = optionsMenu.classList.contains('show');
+
+    // Close other open glass menus
+    document.querySelectorAll('.glass-options.show').forEach(m => {
+      if (m !== optionsMenu) {
+        m.classList.remove('show');
+        const otherTrigger = m.parentElement.querySelector('.glass-select');
+        otherTrigger?.classList.remove('active');
+        // Remove elevation from other cards
+        otherTrigger?.closest('.card')?.classList.remove('card-elevated');
+      }
+    });
+
+    const willShow = !optionsMenu.classList.contains('show');
+    optionsMenu.classList.toggle('show', willShow);
+    trigger.classList.toggle('active', willShow);
+
+    // Elevate the parent card's z-index
+    const parentCard = trigger.closest('.card');
+    if (parentCard) {
+      parentCard.classList.toggle('card-elevated', willShow);
+    }
+  });
+
+  wrapper.appendChild(trigger);
+  wrapper.appendChild(optionsMenu);
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', () => {
+  document.querySelectorAll('.glass-options.show').forEach(m => {
+    m.classList.remove('show');
+    const trigger = m.parentElement.querySelector('.glass-select');
+    trigger?.classList.remove('active');
+    trigger?.closest('.card')?.classList.remove('card-elevated');
+  });
+});
+
 /* ── BOOT ────────────────────────────────────────────────── */
 initDarkMode();
-initLocation();              // Populates selectors, sets SCHEDULE, calls buildScheduleTable + updatePage
-setInterval(updatePage, 1000);  // Refresh countdown every second
+initLocation();
+
+// Initialize custom dropdowns for the first time
+setupCustomDropdown(elDivisionSelect);
+setupCustomDropdown(elZillaSelect);
+
+// We need to refresh them when data changes dynamically
+const originalPopulateZillas = populateZillas;
+populateZillas = function (div) {
+  originalPopulateZillas(div);
+  setupCustomDropdown(elZillaSelect);
+};
+
+const originalOnDivisionChange = onDivisionChange;
+onDivisionChange = function () {
+  originalOnDivisionChange();
+  setupCustomDropdown(elDivisionSelect);
+  setupCustomDropdown(elZillaSelect);
+};
+
+setInterval(updatePage, 1000); // Refresh countdown every second
